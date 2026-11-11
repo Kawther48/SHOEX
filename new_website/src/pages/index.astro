@@ -1,11 +1,11 @@
 ---
 import SiteLayout from '../components/SiteLayout.astro';
 import SneakerCard from '../components/SneakerCard.astro';
-import products from '../data/products.js';
+import products, { sitePath } from '../data/products.js';
 ---
 
 <SiteLayout>
-	<section class="collection-scene" aria-label="SHOEX sneaker installation">
+	<section class="collection-scene" aria-label="SHOEX sneaker installation" style={`--cave-wall: url("${sitePath('cave-wall.svg')}")`}>
 		<div class="collection-intro">
 			<div class="intro-kicker"><span class="kicker-line"></span> A STUDY IN SNEAKERS <span class="kicker-line"></span></div>
 			<h1>Objects in <em>light.</em></h1>
@@ -38,7 +38,7 @@ import products from '../data/products.js';
 		background-color: #30312f;
 		background-image:
 			linear-gradient(180deg, rgba(20,21,21,.28), rgba(20,21,21,.12) 36%, rgba(15,16,16,.35)),
-			url('/cave-wall.svg');
+			var(--cave-wall);
 		background-position: center;
 		background-size: cover;
 	}
