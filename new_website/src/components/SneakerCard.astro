@@ -1,0 +1,177 @@
+---
+import { sitePath } from '../data/products.js';
+const { product, index } = Astro.props;
+---
+
+<a class="installation-item" href={sitePath(`product/${product.slug}/`)} style={`--delay: ${index * 55}ms`} aria-label={`View ${product.name}, ${product.colorway}, £${product.price}`}>
+	<span class="spotlight-beam" aria-hidden="true"></span>
+	<span class="spotlight-pool" aria-hidden="true"></span>
+	<span class="installation-item__code">{product.code}</span>
+	<span class="installation-item__image">
+		<img src={sitePath(`images/homepage/${product.slug}.png`)} alt={`${product.name} sneaker in ${product.colorway}, side view`} loading="eager" />
+	</span>
+	<span class="installation-item__shelf" aria-hidden="true"></span>
+	<span class="installation-item__label">
+		<span class="installation-item__name">{product.name}</span>
+		<span class="installation-item__price">£{product.price}</span>
+		<span class="installation-item__color">{product.colorway}</span>
+	</span>
+</a>
+
+<style>
+	.installation-item {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		grid-template-rows: 1fr 12px auto;
+		min-width: 0;
+		aspect-ratio: 1.13;
+		color: #e8e7e2;
+		text-decoration: none;
+	}
+	.installation-item__code {
+		position: absolute;
+		top: 7px;
+		left: 2px;
+		z-index: 1;
+		color: rgba(235,232,223,.5);
+		font-size: 7px;
+		letter-spacing: .17em;
+	}
+	.installation-item__image {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: end;
+		justify-content: center;
+		min-height: 0;
+		margin: 19px -5px -5px;
+		transition: filter .3s ease;
+	}
+	.installation-item__image img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		filter: drop-shadow(0 12px 8px rgba(0,0,0,.53)) drop-shadow(0 3px 2px rgba(0,0,0,.46));
+	}
+	.installation-item__shelf {
+		position: relative;
+		z-index: 2;
+		display: block;
+		width: 88%;
+		height: 11px;
+		margin: 0 auto;
+		background: linear-gradient(180deg, #303130 0%, #171818 41%, #080909 100%);
+		transform: perspective(120px) rotateX(7deg);
+		box-shadow: 0 10px 11px rgba(0,0,0,.48), 0 2px 6px rgba(0,0,0,.6);
+	}
+	.installation-item__shelf::before {
+		content: '';
+		position: absolute;
+		top: -3px;
+		left: -1%;
+		width: 102%;
+		height: 4px;
+		background: linear-gradient(180deg, #555653, #272827);
+		box-shadow: 0 -3px 9px rgba(0,0,0,.32);
+	}
+	.installation-item__shelf::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: -5px;
+		width: 100%;
+		height: 5px;
+		background: linear-gradient(180deg, #171818, #080909);
+		transform: skewX(-5deg);
+		transform-origin: top;
+	}
+	.installation-item__label {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: minmax(0,1fr) auto;
+		align-items: baseline;
+		gap: 4px 8px;
+		padding: 14px 2px 0;
+		border-top: 1px solid rgba(232,230,221,.15);
+		text-shadow: 0 2px 7px rgba(0,0,0,.7);
+	}
+	.installation-item__name {
+		overflow: hidden;
+		font-family: var(--serif);
+		font-size: clamp(16px, 1.5vw, 22px);
+		font-style: italic;
+		line-height: 1;
+		letter-spacing: -.025em;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.installation-item__price {
+		color: #e0ddd4;
+		font-size: 9px;
+		letter-spacing: .07em;
+	}
+	.installation-item__color {
+		grid-column: 1 / -1;
+		color: rgba(226,224,216,.71);
+		font-size: 8px;
+		letter-spacing: .06em;
+	}
+	.spotlight-beam {
+		position: absolute;
+		z-index: 0;
+		top: -17%;
+		left: 11%;
+		width: 78%;
+		height: 96%;
+		pointer-events: none;
+		opacity: 0;
+		transform: scaleY(.88);
+		transform-origin: 50% 0;
+		background: linear-gradient(180deg,rgba(255,255,247,.35),rgba(255,255,247,.15) 31%,rgba(255,255,247,.035) 77%,transparent);
+		clip-path: polygon(43% 0,57% 0,100% 100%,0 100%);
+		filter: blur(10px);
+		transition: opacity .28s ease, transform .38s ease;
+	}
+	.spotlight-pool {
+		position: absolute;
+		z-index: 0;
+		top: 22%;
+		left: 12%;
+		width: 76%;
+		height: 48%;
+		pointer-events: none;
+		opacity: 0;
+		background: radial-gradient(ellipse,rgba(255,255,244,.28),rgba(255,255,244,.09) 40%,transparent 73%);
+		filter: blur(12px);
+		transition: opacity .28s ease;
+	}
+	.installation-item:hover .spotlight-beam,
+	.installation-item:focus-visible .spotlight-beam,
+	.installation-item:hover .spotlight-pool,
+	.installation-item:focus-visible .spotlight-pool { opacity: 1; }
+	.installation-item:hover .spotlight-beam,
+	.installation-item:focus-visible .spotlight-beam { transform: scaleY(1); }
+	.installation-item:hover .installation-item__image,
+	.installation-item:focus-visible .installation-item__image { filter: brightness(1.11); }
+	.installation-item:hover .installation-item__shelf,
+	.installation-item:focus-visible .installation-item__shelf { box-shadow: 0 13px 15px rgba(0,0,0,.59), 0 0 16px rgba(255,255,244,.1); }
+	@media (max-width: 900px) {
+		.installation-item { aspect-ratio: 1.08; }
+		.installation-item__name { font-size: clamp(16px, 3vw, 21px); }
+	}
+	@media (max-width: 560px) {
+		.installation-item { aspect-ratio: 1.04; }
+		.installation-item__image { margin-inline: -8px; }
+		.installation-item__shelf { width: 92%; height: 9px; }
+		.installation-item__label { padding-top: 12px; }
+		.installation-item__name { font-size: clamp(15px, 4vw, 19px); }
+		.installation-item__color { font-size: 7px; }
+		.installation-item__price { font-size: 8px; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.installation-item__image, .installation-item__shelf, .spotlight-beam, .spotlight-pool { transition: none; }
+	}
+</style>

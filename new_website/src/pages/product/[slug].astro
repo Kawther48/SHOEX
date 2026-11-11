@@ -1,0 +1,164 @@
+---
+import SiteLayout from '../../components/SiteLayout.astro';
+import products, { sitePath, sneakerImage } from '../../data/products.js';
+
+export function getStaticPaths() {
+	return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+---
+
+<SiteLayout title={`${product.name} — SHOEX`} description={`${product.name} in ${product.colorway}. A considered sneaker from SHOEX.`}>
+	<div class="product-page" data-product-page data-product-slug={product.slug}>
+		<a class="back-link" href={sitePath()}><span aria-hidden="true">←</span> Back to the collection</a>
+		<div class="product-layout">
+			<section class="product-gallery" aria-label={`${product.name} gallery`}>
+				<div class="product-visual">
+					<span class="product-visual__code">{product.code} &nbsp; / &nbsp; {product.colorway}</span>
+					<img data-main-product-image src={sneakerImage(product)} alt={`${product.name} sneaker in ${product.colorway}, side profile`} />
+					<span class="product-visual__index">01 <span>—</span> 01</span>
+				</div>
+				<div class="gallery-thumbnails" aria-label="Verified product photograph">
+					<button class="gallery-thumb is-selected" type="button" data-gallery-view="side" aria-label="View sneaker side profile" aria-pressed="true">
+						<img src={sneakerImage(product)} alt="" />
+					</button>
+					<span class="gallery-note">SINGLE VERIFIED SIDE VIEW &nbsp; / &nbsp; <a href={product.source} target="_blank" rel="noreferrer">IMAGE SOURCE ↗</a></span>
+				</div>
+			</section>
+
+			<section class="product-info">
+				<div class="product-eyebrow">{product.code} <span>·</span> MADE WITH INTENTION</div>
+				<h1>{product.name}</h1>
+				<p class="product-colorway">{product.colorway}</p>
+				<p class="product-price">£{product.price}<span> GBP</span></p>
+				<p class="product-description">{product.description}</p>
+
+				<fieldset class="size-picker">
+					<legend>SELECT SIZE <span>UK</span></legend>
+					<div class="size-grid">
+						{[3, 4, 5, 6, 7, 8, 9, 10, 11].map((size) => (
+							<button class="size-option" type="button" data-size={size} aria-pressed="false" disabled={size === 11}>{size}</button>
+						))}
+					</div>
+					<p class="size-message" data-size-message role="alert" aria-live="polite"></p>
+				</fieldset>
+
+				<div class="purchase-row">
+					<label class="quantity-select">QTY
+						<select data-quantity aria-label="Quantity">
+							<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+						</select>
+					</label>
+					<button class="add-button" type="button" data-add-to-bag>
+						<span>ADD TO BAG</span><span aria-hidden="true">↗</span>
+					</button>
+				</div>
+				<p class="add-confirmation" data-add-confirmation role="status" aria-live="polite"></p>
+				<div class="delivery-note"><span class="delivery-dot"></span> COMPLIMENTARY UK DELIVERY · DEMO ITEM</div>
+
+				<details class="specifications" open>
+					<summary>Materials &amp; construction <span>+</span></summary>
+					<dl>
+						<div><dt>Materials</dt><dd>{product.materials}</dd></div>
+						<div><dt>Upper</dt><dd>{product.upper}</dd></div>
+						<div><dt>Sole</dt><dd>{product.sole}</dd></div>
+						<div><dt>Cushioning</dt><dd>{product.cushioning}</dd></div>
+						<div><dt>Fit</dt><dd>{product.fit}</dd></div>
+					</dl>
+				</details>
+				<details class="specifications">
+					<summary>Care <span>+</span></summary>
+					<p class="care-copy">{product.care}</p>
+				</details>
+			</section>
+		</div>
+		<section class="more-from-wall">
+			<span>FROM THE WALL</span>
+			<a href={sitePath()}>Explore the full collection <span aria-hidden="true">↗</span></a>
+		</section>
+	</div>
+</SiteLayout>
+
+<script>
+	import '../../scripts/product.js';
+</script>
+
+<style>
+	.product-page { width: min(1160px, calc(100% - 48px)); margin: 0 auto; padding: 27px 0 55px; }
+	.back-link { display: inline-flex; align-items: center; gap: 9px; color: #aaa9a2; text-decoration: none; font-size: 10px; letter-spacing: .08em; transition: color .2s; }
+	.back-link:hover { color: #f0eee7; }
+	.back-link span { font-size: 15px; }
+	.product-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(350px, .85fr); gap: clamp(38px, 7vw, 100px); margin-top: 21px; }
+	.product-visual { position: relative; display: grid; place-items: center; aspect-ratio: 1.06; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background:
+		radial-gradient(ellipse at 49% 35%, rgba(255,255,255,.075), transparent 54%),
+		linear-gradient(140deg, rgba(255,255,255,.025), transparent 40%),
+		linear-gradient(180deg, #292a2a, #222323); }
+	.product-visual::before { content: ''; position: absolute; inset: 0; opacity: .24; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
+	.product-visual img { position: relative; width: 92%; height: 75%; object-fit: contain; filter: drop-shadow(0 17px 15px rgba(0,0,0,.35)); }
+	.product-visual__code, .product-visual__index { position: absolute; z-index: 1; color: #aaa9a2; font-size: 8px; letter-spacing: .16em; }
+	.product-visual__code { top: 22px; left: 22px; }
+	.product-visual__index { bottom: 20px; right: 22px; }
+	.product-visual__index span { color: #666660; }
+	.gallery-thumbnails { display: flex; align-items: center; gap: 11px; padding-top: 12px; }
+	.gallery-thumb { width: 78px; height: 62px; display: grid; place-items: center; padding: 3px; border: 1px solid rgba(255,255,255,.14); background: #272828; cursor: pointer; transition: border-color .2s; }
+	.gallery-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+	.gallery-thumb.is-selected, .gallery-thumb:hover { border-color: #d6d1c5; }
+	.gallery-note { margin-left: auto; color: #aaa9a2; font-size: 7px; letter-spacing: .13em; }
+	.gallery-note a { color: #d7d4ca; text-underline-offset: 3px; }
+	.product-info { padding-top: 10px; }
+	.product-eyebrow { color: #aaa9a2; font-size: 8px; letter-spacing: .17em; }
+	.product-eyebrow span { padding: 0 6px; color: #62625d; }
+	.product-info h1 { margin: 13px 0 3px; font-size: clamp(42px, 5vw, 58px); line-height: .95; }
+	.product-colorway { margin: 7px 0 0; color: #a7a69f; font-size: 10px; letter-spacing: .1em; }
+	.product-price { margin: 24px 0 17px; font-family: var(--serif); font-size: 29px; font-style: italic; color: #e5e2d9; }
+	.product-price span { margin-left: 8px; font-family: var(--sans); font-size: 8px; font-style: normal; letter-spacing: .18em; color: #94938c; }
+	.product-description { max-width: 420px; margin: 0; color: #b6b5ae; font-size: 11px; line-height: 1.9; }
+	.size-picker { min-width: 0; margin: 26px 0 0; padding: 0; border: 0; }
+	.size-picker legend { padding: 0 0 11px; color: #e0ded6; font-size: 8px; letter-spacing: .17em; }
+	.size-picker legend span { margin-left: 5px; color: #94938c; }
+	.size-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+	.size-option { min-height: 39px; border: 1px solid rgba(255,255,255,.17); background: #202121; color: #d5d3cb; font-size: 10px; cursor: pointer; transition: border-color .18s, background .18s, color .18s; }
+	.size-option:hover:not(:disabled), .size-option.is-selected { border-color: #e5e1d5; background: #dedacf; color: #1b1c1c; }
+	.size-option:disabled { border-color: rgba(255,255,255,.07); color: #62625e; text-decoration: line-through; cursor: not-allowed; }
+	.size-message { min-height: 15px; margin: 7px 0 0; color: #e4cfc4; font-size: 10px; letter-spacing: .02em; }
+	.purchase-row { display: grid; grid-template-columns: 78px 1fr; gap: 10px; }
+	.quantity-select { display: flex; flex-direction: column; justify-content: space-between; min-height: 50px; padding: 8px 10px 6px; border: 1px solid rgba(255,255,255,.16); color: #aaa9a2; font-size: 7px; letter-spacing: .14em; }
+	.quantity-select select { width: 100%; padding: 0; border: 0; outline: 0; background: transparent; color: #edeae2; font-size: 12px; cursor: pointer; }
+	.quantity-select option { background: #202121; }
+	.add-button { min-height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 17px; border: 1px solid #e1ddd2; background: #dfdbd0; color: #1b1c1c; font-size: 9px; letter-spacing: .16em; cursor: pointer; transition: background .2s, color .2s; }
+	.add-button:hover { background: #f1eee5; }
+	.add-button span:last-child { font-size: 16px; }
+	.add-confirmation { min-height: 16px; margin: 9px 0 0; color: #d8d1c0; font-size: 10px; }
+	.delivery-note { display: flex; align-items: center; gap: 8px; margin: 12px 0 24px; color: #8f8e87; font-size: 7px; letter-spacing: .14em; }
+	.delivery-dot { width: 5px; height: 5px; border-radius: 50%; background: #b1aa98; }
+	.specifications { border-top: 1px solid var(--line); }
+	.specifications:last-of-type { border-bottom: 1px solid var(--line); }
+	.specifications summary { display: flex; justify-content: space-between; padding: 14px 0; color: #e2e0d8; font-size: 9px; letter-spacing: .07em; cursor: pointer; list-style: none; }
+	.specifications summary::-webkit-details-marker { display: none; }
+	.specifications summary span { color: #aaa9a2; font-size: 14px; line-height: 1; }
+	.specifications[open] summary span { transform: rotate(45deg); }
+	.specifications dl { display: grid; gap: 11px; margin: 2px 0 17px; }
+	.specifications dl div { display: grid; grid-template-columns: 105px 1fr; gap: 10px; font-size: 9px; line-height: 1.5; }
+	.specifications dt { color: #898880; }
+	.specifications dd { margin: 0; color: #c1c0b9; }
+	.care-copy { margin: 0 0 17px; color: #b7b6af; font-size: 10px; line-height: 1.7; }
+	.more-from-wall { display: flex; justify-content: space-between; margin-top: 48px; padding: 20px 0; border-top: 1px solid var(--line); color: #999890; font-size: 8px; letter-spacing: .16em; }
+	.more-from-wall a { text-decoration: none; color: #dedbd2; }
+	.more-from-wall a span { padding-left: 5px; }
+	@media (max-width: 760px) {
+		.product-layout { grid-template-columns: 1fr; gap: 30px; margin-top: 17px; }
+		.product-page { width: min(620px, calc(100% - 36px)); padding-top: 21px; }
+		.product-visual { aspect-ratio: 1.02; }
+		.product-info { padding-top: 0; }
+		.product-info h1 { font-size: 50px; }
+		.size-grid { gap: 5px; }
+	}
+	@media (max-width: 420px) {
+		.product-page { width: calc(100% - 30px); }
+		.gallery-note { font-size: 6px; letter-spacing: .1em; }
+		.gallery-thumb { width: 66px; height: 54px; }
+		.size-option { min-height: 37px; font-size: 9px; }
+		.more-from-wall { gap: 12px; font-size: 7px; }
+	}
+</style>

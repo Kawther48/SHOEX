@@ -1,0 +1,93 @@
+---
+import SiteLayout from '../components/SiteLayout.astro';
+import { sitePath } from '../data/products.js';
+---
+
+<SiteLayout title="Your bag — SHOEX" description="Review your SHOEX demo shopping bag. No real purchases or payments can be made.">
+	<div class="bag-page">
+		<a class="back-link" href={sitePath()}><span aria-hidden="true">←</span> Continue shopping</a>
+		<div class="bag-heading">
+			<div class="bag-eyebrow">YOUR EDITION</div>
+			<h1>Your <em>bag.</em></h1>
+		</div>
+		<div class="bag-content">
+			<div class="bag-items" data-bag-items aria-live="polite"></div>
+			<section class="empty-state" data-bag-empty hidden>
+				<div class="empty-mark" aria-hidden="true">S</div>
+				<h2>A little room for something good.</h2>
+				<p>Your bag is taking a moment to itself.</p>
+				<a class="continue-button" href={sitePath()}>DISCOVER THE COLLECTION <span aria-hidden="true">↗</span></a>
+			</section>
+			<aside class="bag-summary" data-bag-summary hidden>
+				<div class="summary-row"><span>SUBTOTAL</span><strong data-bag-total>£0</strong></div>
+				<p class="demo-notice">Demo only. No real purchases or payments can be made.</p>
+				<button class="checkout-button" type="button" disabled aria-describedby="checkout-note">CHECKOUT UNAVAILABLE</button>
+				<p id="checkout-note" class="checkout-note">This demonstration does not accept orders or payments.</p>
+				<a class="back-to-wall" href={sitePath()}>← &nbsp; Back to the collection</a>
+			</aside>
+		</div>
+	</div>
+</SiteLayout>
+
+<script>
+	import '../scripts/bag.js';
+</script>
+
+<style>
+	.bag-page { width: min(1110px, calc(100% - 48px)); min-height: 68vh; margin: 0 auto; padding: 27px 0 76px; }
+	.back-link { display: inline-flex; align-items: center; gap: 9px; color: #aaa9a2; text-decoration: none; font-size: 10px; letter-spacing: .08em; }
+	.back-link:hover { color: #f0eee7; }
+	.back-link span { font-size: 15px; }
+	.bag-heading { margin: 43px 0 28px; }
+	.bag-eyebrow { color: #aaa9a2; font-size: 8px; letter-spacing: .2em; }
+	.bag-heading h1 { margin: 8px 0 0; font-family: var(--serif); font-size: 62px; font-style: italic; font-weight: 400; letter-spacing: -.05em; line-height: 1; }
+	.bag-heading h1 em { color: #d9d3c7; }
+	.bag-content { display: grid; grid-template-columns: minmax(0, 1fr) 292px; align-items: start; gap: clamp(30px, 7vw, 87px); }
+	.bag-items { border-top: 1px solid var(--line); }
+	.bag-item { display: grid; grid-template-columns: 152px minmax(0,1fr) 150px; align-items: center; gap: 19px; min-height: 153px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+	.bag-item__image { display: grid; place-items: center; height: 112px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: radial-gradient(ellipse at center, #333434, #222323 75%); }
+	.bag-item__image img { width: 100%; height: 100%; object-fit: contain; }
+	.bag-item__details { min-width: 0; }
+	.bag-item__name { font-family: var(--serif); font-size: 25px; font-style: italic; text-decoration: none; }
+	.bag-item__color, .bag-item__size, .bag-item__unit-price { margin: 6px 0 0; color: #a3a29b; font-size: 9px; letter-spacing: .05em; }
+	.bag-item__size { margin-top: 12px; color: #d2d0c8; }
+	.bag-item__actions { display: flex; align-items: flex-end; flex-direction: column; gap: 12px; }
+	.quantity-control { display: flex; align-items: center; justify-content: space-between; width: 88px; height: 31px; border: 1px solid rgba(255,255,255,.19); font-size: 10px; }
+	.quantity-control__button { width: 28px; height: 29px; padding: 0; border: 0; background: transparent; color: #d9d7ce; cursor: pointer; font-size: 15px; }
+	.quantity-control__button:hover { background: rgba(255,255,255,.1); }
+	.bag-item__subtotal { color: #e1ded5; font-family: var(--serif); font-size: 19px; font-style: italic; }
+	.bag-item__remove { padding: 0; border: 0; background: none; color: #92918a; font-size: 8px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+	.bag-item__remove:hover { color: #e5e2d9; }
+	.bag-summary { position: sticky; top: 24px; padding: 20px; border: 1px solid var(--line); background: #1c1d1d; }
+	.summary-row { display: flex; align-items: center; justify-content: space-between; color: #c5c3bb; font-size: 8px; letter-spacing: .16em; }
+	.summary-row strong { color: #efede5; font-family: var(--serif); font-size: 25px; font-style: italic; font-weight: 400; letter-spacing: 0; }
+	.demo-notice { margin: 16px 0 17px; color: #c4c0b6; font-size: 9px; line-height: 1.7; }
+	.checkout-button { width: 100%; min-height: 46px; border: 1px solid rgba(255,255,255,.14); background: #303131; color: #878680; font-size: 8px; letter-spacing: .13em; cursor: not-allowed; }
+	.checkout-note { margin: 10px 0 0; color: #82817b; font-size: 8px; line-height: 1.6; }
+	.back-to-wall { display: inline-block; margin-top: 24px; color: #cfccc3; text-decoration: none; font-size: 9px; }
+	.empty-state { grid-column: 1 / -1; display: flex; align-items: center; flex-direction: column; min-height: 330px; padding: 34px 20px; text-align: center; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.045), transparent 55%), #1c1d1d; }
+	.empty-mark { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; color: #dedacf; font-family: var(--serif); font-size: 24px; font-style: italic; }
+	.empty-state h2 { margin: 20px 0 5px; font-family: var(--serif); font-size: 30px; font-style: italic; font-weight: 400; }
+	.empty-state p { margin: 0 0 23px; color: #a8a79f; font-size: 10px; }
+	.continue-button { display: inline-flex; justify-content: space-between; align-items: center; gap: 30px; min-height: 43px; padding: 0 15px; border: 1px solid rgba(255,255,255,.22); text-decoration: none; color: #e6e3da; font-size: 8px; letter-spacing: .12em; }
+	.continue-button:hover { background: #dedacf; color: #1c1d1d; }
+	.continue-button span { font-size: 14px; }
+	[hidden] { display: none !important; }
+	@media (max-width: 780px) {
+		.bag-content { grid-template-columns: 1fr; gap: 25px; }
+		.bag-summary { position: static; max-width: none; }
+		.bag-heading { margin: 35px 0 21px; }
+	}
+	@media (max-width: 560px) {
+		.bag-page { width: calc(100% - 32px); padding-top: 21px; }
+		.bag-heading h1 { font-size: 54px; }
+		.bag-item { grid-template-columns: 95px minmax(0,1fr); gap: 12px; min-height: 130px; }
+		.bag-item__image { height: 92px; }
+		.bag-item__name { font-size: 21px; }
+		.bag-item__actions { grid-column: 2; align-items: center; flex-direction: row; justify-content: space-between; gap: 8px; }
+		.quantity-control { width: 78px; }
+		.quantity-control__button { width: 24px; }
+		.bag-item__subtotal { font-size: 17px; }
+		.empty-state h2 { font-size: 26px; }
+	}
+</style>
